@@ -14,13 +14,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         longPressButton = (LongPressButton) findViewById(R.id.longPressButton);
+        longPressButton.setLongPressSecond(2);
+        longPressButton.setCountDownSecond(10);
 
         longPressButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                longPressButton.Countdown("60");
                 longPressButton.timer.start();
-                Toast.makeText(MainActivity.this, "开始倒计时", Toast.LENGTH_SHORT);
+                Toast.makeText(MainActivity.this, "开始倒计时", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });

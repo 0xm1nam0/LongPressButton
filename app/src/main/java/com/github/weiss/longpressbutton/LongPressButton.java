@@ -18,21 +18,24 @@ public class LongPressButton extends Button {
     private static final int TOUCH_SLOP = 100;
     private int count;
     //长按多少秒进入倒计时
-    private int longPressTime = 3;
+    private int longPressSecond = 3;
     //倒计时秒数
     private int countDownSecond = 60;
+
+    public CountDownTimer timer;
 
     //长按的runnable
     private Runnable mLongPressRunnable = new Runnable() {
 
         @Override
         public void run() {
-            if (count == longPressTime - 1) {
-                performLongClick();
+            if (count == longPressSecond - 1) {
+                Countdown(countDownSecond + "");
                 count = 0;
+                performLongClick();
                 return;
             } else {
-                setText(2 - count + "");
+                setText(longPressSecond - 1 - count + "");
                 count++;
                 postDelayed(mLongPressRunnable, 1000);
             }
@@ -42,14 +45,17 @@ public class LongPressButton extends Button {
 
     public LongPressButton(Context context) {
         super(context);
+        initCountDownTimer();
     }
 
     public LongPressButton(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initCountDownTimer();
     }
 
     public LongPressButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initCountDownTimer();
     }
 
 
@@ -65,7 +71,7 @@ public class LongPressButton extends Button {
                 mLastMotionX = x;
                 mLastMotionY = y;
                 isMoved = false;
-                StartLongPress(3 + "");
+                StartLongPress(longPressSecond + "");
                 postDelayed(mLongPressRunnable, 1000);
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -87,18 +93,37 @@ public class LongPressButton extends Button {
         return true;
     }
 
-    CountDownTimer timer = new CountDownTimer(countDownSecond * 1000, 1000) {
+    private void initCountDownTimer() {
+        timer = new CountDownTimer(countDownSecond * 1000, 1000) {
 
-        @Override
-        public void onTick(long millisUntilFinished) {
-            setText(millisUntilFinished / 1000 + "");
-        }
+            @Override
+            public void onTick(long millisUntilFinished) {
+                setText(millisUntilFinished / 1000 + "");
+            }
 
-        @Override
-        public void onFinish() {
-            Start();
-        }
-    };
+            @Override
+            public void onFinish() {
+                Start();
+            }
+        };
+    }
+
+    public int getLongPressSecond() {
+        return longPressSecond;
+    }
+
+    public void setLongPressSecond(int longPressSecond) {
+        this.longPressSecond = longPressSecond;
+    }
+
+    public int getCountDownSecond() {
+        return countDownSecond;
+    }
+
+    public void setCountDownSecond(int countDownSecond) {
+        this.countDownSecond = countDownSecond;
+        initCountDownTimer();
+    }
 
     /**
      * 整装待发
